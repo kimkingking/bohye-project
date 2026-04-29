@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다이어트 식단 기록</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header-section { background-color: #28a745; color: white; padding: 2rem 0; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+
+<div class="header-section text-center">
+    <h1>🥗 다이어트 식단 기록 (K8s Test App)</h1>
+    <p>백업 및 복구 테스트를 위한 간단한 식단 로그 관리 서비스</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Input Form -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-white font-weight-bold">
+                    <strong>새 식단 추가</strong>
+                </div>
+                <div class="card-body">
+                    <form action="/add" method="POST">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">날짜</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="food_name" class="form-label">음식명</label>
+                            <input type="text" class="form-control" id="food_name" name="food_name" placeholder="예: 닭가슴살 샐러드" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="calories" class="form-label">칼로리 (kcal)</label>
+                            <input type="number" class="form-control" id="calories" name="calories" placeholder="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">메모</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="기타 특이사항"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-full">기록 저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meal List Table -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <strong>식단 기록 목록</strong>
+                    <span class="badge bg-secondary">{{ meals|length }} records</span>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-2">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>날짜</th>
+                                    <th>음식명</th>
+                                    <th>칼로리</th>
+                                    <th>메모</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if meals %}
+                                    {% for meal in meals %}
+                                    <tr>
+                                        <td>{{ meal.date }}</td>
+                                        <td>{{ meal.food_name }}</td>
+                                        <td class="text-primary">{{ meal.calories }} kcal</td>
+                                        <td><small class="text-muted">{{ meal.notes or '-' }}</small></td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4">기록된 식단이 없습니다.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Set default date to today
+    document.getElementById('date').valueAsDate = new Date();
+</script>
+</body>
+</html>
