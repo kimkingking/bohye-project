@@ -1,0 +1,54 @@
+# 백엔드 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diet-backend
+  namespace: diet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diet-backend
+  template:
+    metadata:
+      labels:
+        app: diet-backend
+    spec:
+      containers:
+      - name: diet-backend
+        image: kingking4105/diet-backend:v7
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_HOST
+          value: "mysql-service"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "1234"
+        - name: DB_NAME
+          value: "diet_db"
+        - name: DB_CHARSET
+          value: "utf8mb4"
+---
+# 프론트엔드 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diet-frontend
+  namespace: diet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diet-frontend
+  template:
+    metadata:
+      labels:
+        app: diet-frontend
+    spec:
+      containers:
+      - name: diet-frontend
+        image: kingking4105/diet-frontend:v3
+        ports:
+        - containerPort: 3000 # server.ts가 사용하는 포트

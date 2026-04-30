@@ -1,0 +1,6 @@
+{
+  "name": "Diet Meal Log (K8s Recovery Test)",
+  "description": "A Python/Flask application with MySQL backend designed for Kubernetes backup and recovery testing with Kasten.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

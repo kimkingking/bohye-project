@@ -1,0 +1,8 @@
+# nfs-sc.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage
+provisioner: cluster.local/nfs-server-provisione
+parameters:
+  archiveOnDelete: "false"

@@ -1,0 +1,26 @@
+# k8s/services.yaml (실제 서비스 파일)
+apiVersion: v1
+kind: Service
+metadata:
+  name: diet-backend-service
+  namespace: diet-app
+spec:
+  selector:
+    app: diet-backend
+  ports:
+  - port: 3000        # 서비스 내부 포트
+    targetPort: 3000  # 파드의 컨테이너 포트
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diet-frontend-service
+  namespace: diet-app
+spec:
+  type: NodePort
+  selector:
+    app: diet-frontend
+  ports:
+  - port: 80          # 서비스 포트
+    targetPort: 80
+    nodePort: 30000   # 외부 접속용 포트 (30000)
